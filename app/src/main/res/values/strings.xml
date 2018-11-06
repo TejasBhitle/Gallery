@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Gallery</string>
+    <string name="settings">Settings</string>
+    <string name="show_hidden">Show Hidden</string>
+
+
+    <!--Preference Strings-->
+    <string name="prefs_show_hidden">preference_show_hidden</string>
+    <string name="first_category">First Category</string>
+
+</resources>

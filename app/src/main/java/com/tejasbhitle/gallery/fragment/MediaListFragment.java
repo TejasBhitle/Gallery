@@ -12,8 +12,12 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IAdapter;
+import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
+import com.mikepenz.fastadapter.listeners.OnClickListener;
 import com.tejasbhitle.gallery.R;
+import com.tejasbhitle.gallery.model.MediaModel;
 import com.tejasbhitle.gallery.util.Constants;
 import com.tejasbhitle.gallery.util.FileHandler;
 
@@ -61,7 +65,13 @@ public class MediaListFragment extends Fragment {
         itemAdapter = new ItemAdapter();
         fastAdapter = FastAdapter.with(itemAdapter);
         fastAdapter.withSelectable(true);
-
+        fastAdapter.withOnClickListener(new OnClickListener<MediaModel>() {
+            @Override
+            public boolean onClick(View v, IAdapter<MediaModel> adapter, MediaModel item, int position) {
+                mediaListFragmentListener.showMediaFragment(item);
+                return false;
+            }
+        });
         gridLayoutManager = new GridLayoutManager(getContext(),2);
         recyclerView.setLayoutManager(gridLayoutManager);
         return view;
@@ -93,11 +103,13 @@ public class MediaListFragment extends Fragment {
         recyclerView.setAdapter(fastAdapter);
     }
 
+
     public void setMediaListFragmentListener(MediaListFragmentListener l){
         this.mediaListFragmentListener = l;
     }
 
     public interface MediaListFragmentListener{
         String getAlbumPath();
+        void showMediaFragment(MediaModel mediaModel);
     }
 }

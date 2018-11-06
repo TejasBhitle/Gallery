@@ -68,4 +68,12 @@ public class FileHandler {
         return mediaModels;
     }
 
+    public static File getThumbnail(File file){
+        for(File f : file.listFiles(new ImageFileFilter())){
+            if(!f.isDirectory())
+                return f;
+        }
+        return null;
+    }
+
 }

@@ -55,7 +55,6 @@ public class AlbumListFragment extends Fragment
                              @Nullable Bundle savedInstanceState
     ) {
 
-        Log.e(TAG,"onCreateView");
         View view = inflater.inflate(R.layout.fragment_album_view,container,false);
 
         recyclerView = view.findViewById(R.id.recyclerview);

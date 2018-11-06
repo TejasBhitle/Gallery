@@ -10,6 +10,7 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 import com.squareup.picasso.Picasso;
 import com.tejasbhitle.gallery.R;
 import com.tejasbhitle.gallery.util.Constants;
+import com.tejasbhitle.gallery.util.FileHandler;
 
 import java.io.File;
 import java.util.List;
@@ -82,8 +83,9 @@ public class AlbumModel extends AbstractItem<AlbumModel, AlbumModel.ViewHolder> 
             album_path.setText(item.getFilePath().replace(Constants.INTERNAL_STORAGE_PATH,"/"));
             album_size.setText(String.valueOf(item.getNumOfFiles()));
 
+
             Picasso.get()
-                    .load(item.getFile().listFiles()[0])
+                    .load(FileHandler.getThumbnail(item.getFile()))
                     .fit()
                     .centerCrop()
                     .into(album_image);

@@ -1,11 +1,14 @@
 package com.tejasbhitle.gallery.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.mikepenz.fastadapter.FastAdapter;
@@ -23,18 +26,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MediaListFragment extends Fragment {
 
-    private static final String TAG = "MediaListFragment";
+    public static final String TAG = "MEDIA_LIST_FRAGMENT";
 
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
     private FastAdapter fastAdapter;
     private MediaListFragmentListener mediaListFragmentListener;
     private String path;
-
+    private GridLayoutManager gridLayoutManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // retain this fragment when activity is re-initialized
+        setRetainInstance(true);
 
         if(this.mediaListFragmentListener != null)
             path = this.mediaListFragmentListener.getAlbumPath();
@@ -55,9 +61,30 @@ public class MediaListFragment extends Fragment {
         itemAdapter = new ItemAdapter();
         fastAdapter = FastAdapter.with(itemAdapter);
         fastAdapter.withSelectable(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
-        getAllMedia(path);
+
+        gridLayoutManager = new GridLayoutManager(getContext(),2);
+        recyclerView.setLayoutManager(gridLayoutManager);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        int screenOrientation = ((WindowManager) getContext()
+                .getSystemService(Context.WINDOW_SERVICE))
+                .getDefaultDisplay()
+                .getOrientation();
+
+        if(screenOrientation == Surface.ROTATION_90 || screenOrientation == Surface.ROTATION_270){
+            ((GridLayoutManager)recyclerView.getLayoutManager()).setSpanCount(4);
+
+        }
+        else{
+            ((GridLayoutManager)recyclerView.getLayoutManager()).setSpanCount(2);
+
+        }
+        getAllMedia(path);
     }
 
     private void getAllMedia(String absAlbumPath){

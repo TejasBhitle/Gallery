@@ -1,13 +1,17 @@
 package com.tejasbhitle.gallery.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -28,9 +32,21 @@ import androidx.recyclerview.widget.RecyclerView;
 public class AlbumListFragment extends Fragment
         implements SharedPreferences.OnSharedPreferenceChangeListener{
 
+
+    public static final String TAG = "ALBUM_LIST_FRAGMENT";
+
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
     private FastAdapter fastAdapter;
+    private GridLayoutManager gridLayoutManager;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // retain this fragment when activity is re-initialized
+        setRetainInstance(true);
+    }
 
     @Nullable
     @Override
@@ -38,6 +54,8 @@ public class AlbumListFragment extends Fragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState
     ) {
+
+        Log.e(TAG,"onCreateView");
         View view = inflater.inflate(R.layout.fragment_album_view,container,false);
 
         recyclerView = view.findViewById(R.id.recyclerview);
@@ -55,14 +73,30 @@ public class AlbumListFragment extends Fragment
                 return false;
             }
         });
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+        gridLayoutManager = new GridLayoutManager(getContext(),2);
+        recyclerView.setLayoutManager(gridLayoutManager);
 
         return view;
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
+
+        int screenOrientation = ((WindowManager) getContext()
+                .getSystemService(Context.WINDOW_SERVICE))
+                .getDefaultDisplay()
+                .getOrientation();
+
+        if(screenOrientation == Surface.ROTATION_90 || screenOrientation == Surface.ROTATION_270){
+            ((GridLayoutManager)recyclerView.getLayoutManager()).setSpanCount(4);
+
+        }
+        else{
+            ((GridLayoutManager)recyclerView.getLayoutManager()).setSpanCount(2);
+
+        }
         fetchImageAlbums();
     }
 

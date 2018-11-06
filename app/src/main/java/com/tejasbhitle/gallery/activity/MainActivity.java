@@ -18,7 +18,18 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setInitialFragment();
+
+        if(savedInstanceState != null) {
+            albumFragment = (AlbumListFragment) getSupportFragmentManager()
+                    .findFragmentByTag(AlbumListFragment.TAG);
+
+        }
+        else {
+            albumFragment = new AlbumListFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container,albumFragment, AlbumListFragment.TAG)
+                    .commit();
+        }
 
     }
 
@@ -36,13 +47,6 @@ public class MainActivity extends AppCompatActivity{
                 break;
         }
         return true;
-    }
-
-    private void setInitialFragment(){
-        albumFragment = new AlbumListFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container,albumFragment)
-                .commit();
     }
 
 

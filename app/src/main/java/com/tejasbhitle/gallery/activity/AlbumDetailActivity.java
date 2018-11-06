@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class AlbumDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "AlbumDetailActivity";
+    private static final String ALBUM_PATH_KEY = "ALBUM_PATH_KEY";
     private MediaListFragment mediaListFragment;
     private String albumPath = "";
 
@@ -21,13 +22,40 @@ public class AlbumDetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album_detail);
-        setInitialFragment();
 
-        Bundle bundle = getIntent().getExtras();
-        if(bundle != null){
-            albumPath = bundle.getString(Constants.ABS_FILE_PATH,"");
+
+        if(savedInstanceState != null){
+            albumPath = savedInstanceState.getString(ALBUM_PATH_KEY);
+            mediaListFragment = (MediaListFragment)getSupportFragmentManager()
+                    .findFragmentByTag(MediaListFragment.TAG);
         }
-        Log.e(TAG,albumPath);
+        else{
+
+            Bundle bundle = getIntent().getExtras();
+            if(bundle != null){
+                albumPath = bundle.getString(Constants.ABS_FILE_PATH,"");
+            }
+
+            mediaListFragment = new MediaListFragment();
+            mediaListFragment.setMediaListFragmentListener(
+                    new MediaListFragment.MediaListFragmentListener() {
+                        @Override
+                        public String getAlbumPath() {
+                            return albumPath;
+                        }
+                    });
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container,mediaListFragment,MediaListFragment.TAG)
+                    .commit();
+        }
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(ALBUM_PATH_KEY,albumPath);
+        super.onSaveInstanceState(outState);
     }
 
 
@@ -41,19 +69,4 @@ public class AlbumDetailActivity extends AppCompatActivity {
         return true;
     }
 
-    private void setInitialFragment(){
-
-        mediaListFragment = new MediaListFragment();
-        mediaListFragment.setMediaListFragmentListener(
-                new MediaListFragment.MediaListFragmentListener() {
-                    @Override
-                    public String getAlbumPath() {
-                        return albumPath;
-                    }
-                });
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container,mediaListFragment)
-                .commit();
-    }
 }

@@ -6,7 +6,6 @@ import android.view.MenuItem;
 
 import com.tejasbhitle.gallery.R;
 import com.tejasbhitle.gallery.fragment.MediaFragment;
-import com.tejasbhitle.gallery.model.MediaModel;
 import com.tejasbhitle.gallery.util.Constants;
 
 import androidx.annotation.Nullable;
@@ -16,7 +15,6 @@ public class MediaActivity extends AppCompatActivity {
 
     private static final String TAG = "MediaActivity";
     private MediaFragment mediaFragment;
-    private MediaModel mediaModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,7 +24,6 @@ public class MediaActivity extends AppCompatActivity {
         mediaFragment = getMediaFragment();
         if(savedInstanceState != null){
 
-            mediaModel = savedInstanceState.getParcelable(Constants.MEDIA_MODEL_KEY);
             mediaFragment = (MediaFragment) getSupportFragmentManager()
                     .findFragmentByTag(MediaFragment.TAG);
 
@@ -35,24 +32,21 @@ public class MediaActivity extends AppCompatActivity {
 
             Bundle bundle = getIntent().getExtras();
             if(bundle != null){
-                mediaModel = bundle.getParcelable(Constants.MEDIA_MODEL_KEY);
+                mediaFragment = getMediaFragment();
+                mediaFragment.setArgs(bundle);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment_container,mediaFragment, MediaFragment.TAG)
+                        .commit();
             }
-            if(mediaModel == null)
-                Log.e(TAG,"mediamodel is null");
-            mediaFragment = getMediaFragment();
-            mediaFragment.setMediaModel(mediaModel);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container,mediaFragment, MediaFragment.TAG)
-                    .commit();
         }
     }
 
 
-    @Override
+    /*@Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(Constants.MEDIA_MODEL_KEY,mediaModel);
+        outState.putString(Constants.ABS_FILE_PATH, absAlbumPath);
         super.onSaveInstanceState(outState);
-    }
+    }*/
 
 
     private MediaFragment getMediaFragment(){

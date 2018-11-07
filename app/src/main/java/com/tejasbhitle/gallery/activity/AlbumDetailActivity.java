@@ -30,9 +30,8 @@ public class AlbumDetailActivity extends AppCompatActivity {
         if(savedInstanceState != null){
 
             albumPath = savedInstanceState.getString(ALBUM_PATH_KEY);
-
-                mediaListFragment = (MediaListFragment) getSupportFragmentManager()
-                        .findFragmentByTag(MediaListFragment.TAG);
+            mediaListFragment = (MediaListFragment) getSupportFragmentManager()
+                    .findFragmentByTag(MediaListFragment.TAG);
 
         }
         else{
@@ -47,6 +46,7 @@ public class AlbumDetailActivity extends AppCompatActivity {
                     .add(R.id.fragment_container,mediaListFragment, MediaListFragment.TAG)
                     .commit();
         }
+        setTitle(albumPath.substring(albumPath.lastIndexOf("/")+1,albumPath.length()));
 
     }
 
@@ -60,10 +60,11 @@ public class AlbumDetailActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void showMediaFragment(MediaModel mediaModel) {
+                    public void showMediaFragment(int position) {
                         Intent intent = new Intent(AlbumDetailActivity.this,MediaActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putParcelable(Constants.MEDIA_MODEL_KEY,mediaModel);
+                        bundle.putString(Constants.ABS_FILE_PATH,albumPath);
+                        bundle.putInt(Constants.FILE_POSITION_KEY, position);
                         intent.putExtras(bundle);
                         startActivity(intent);
                     }

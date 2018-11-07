@@ -42,7 +42,6 @@ public class MediaListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e(TAG,"onCreate");
 
         // retain this fragment when activity is re-initialized
         setRetainInstance(true);
@@ -58,7 +57,6 @@ public class MediaListFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState
     ) {
-        Log.e(TAG,"onCreateView");
         View view = inflater.inflate(R.layout.fragment_media_list,container,false);
 
 
@@ -70,7 +68,7 @@ public class MediaListFragment extends Fragment {
         fastAdapter.withOnClickListener(new OnClickListener<MediaModel>() {
             @Override
             public boolean onClick(View v, IAdapter<MediaModel> adapter, MediaModel item, int position) {
-                mediaListFragmentListener.showMediaFragment(item);
+                mediaListFragmentListener.showMediaFragment(position);
                 return false;
             }
         });
@@ -104,12 +102,11 @@ public class MediaListFragment extends Fragment {
 
 
     public void setMediaListFragmentListener(MediaListFragmentListener l){
-        Log.e(TAG,"setMediaListFragmentListener");
         this.mediaListFragmentListener = l;
     }
 
     public interface MediaListFragmentListener{
         String getAlbumPath();
-        void showMediaFragment(MediaModel mediaModel);
+        void showMediaFragment(int position);
     }
 }

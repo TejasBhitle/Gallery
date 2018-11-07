@@ -1,12 +1,11 @@
 package com.tejasbhitle.gallery.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.tejasbhitle.gallery.R;
-import com.tejasbhitle.gallery.fragment.MediaFragment;
 import com.tejasbhitle.gallery.fragment.MediaListFragment;
 import com.tejasbhitle.gallery.model.MediaModel;
 import com.tejasbhitle.gallery.util.Constants;
@@ -18,51 +17,31 @@ public class AlbumDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "AlbumDetailActivity";
     private static final String ALBUM_PATH_KEY = "ALBUM_PATH_KEY";
+
     private MediaListFragment mediaListFragment;
-    private MediaFragment mediaFragment;
     private String albumPath = "";
-    private boolean isMediaListFragmentShown = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album_detail);
 
+
         if(savedInstanceState != null){
+
             albumPath = savedInstanceState.getString(ALBUM_PATH_KEY);
-            mediaListFragment = (MediaListFragment)getSupportFragmentManager()
-                    .findFragmentByTag(MediaListFragment.TAG);
-            mediaFragment = (MediaFragment)getSupportFragmentManager()
-                    .findFragmentByTag(MediaFragment.TAG);
+
+                mediaListFragment = (MediaListFragment) getSupportFragmentManager()
+                        .findFragmentByTag(MediaListFragment.TAG);
+
         }
         else{
-
             Bundle bundle = getIntent().getExtras();
             if(bundle != null){
                 albumPath = bundle.getString(Constants.ABS_FILE_PATH,"");
             }
 
-            mediaFragment = new MediaFragment();
-            mediaFragment.setMediaFragmentListener(new MediaFragment.MediaFragmentListener() {
-                @Override
-                public void showMediaFragment() {
-                    switchToMediaListFragment();
-                }
-            });
-
-            mediaListFragment = new MediaListFragment();
-            mediaListFragment.setMediaListFragmentListener(
-                    new MediaListFragment.MediaListFragmentListener() {
-                        @Override
-                        public String getAlbumPath() {
-                            return albumPath;
-                        }
-
-                        @Override
-                        public void showMediaFragment(MediaModel mediaModel) {
-                            switchToMediaFragment(mediaModel);
-                        }
-                    });
+            mediaListFragment = getMediaListFragment();
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container,mediaListFragment, MediaListFragment.TAG)
@@ -71,28 +50,33 @@ public class AlbumDetailActivity extends AppCompatActivity {
 
     }
 
-    /*Called when an image is clicked in MediaListFragment */
-    private void switchToMediaFragment(MediaModel mediaModel){
-        isMediaListFragmentShown = false;
-        mediaFragment.setMediaModel(mediaModel);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container,mediaFragment,MediaFragment.TAG)
-                .commit();
+    private MediaListFragment getMediaListFragment(){
+        MediaListFragment fragment = new MediaListFragment();
+        fragment.setMediaListFragmentListener(
+                new MediaListFragment.MediaListFragmentListener() {
+                    @Override
+                    public String getAlbumPath() {
+                        return albumPath;
+                    }
+
+                    @Override
+                    public void showMediaFragment(MediaModel mediaModel) {
+                        Intent intent = new Intent(AlbumDetailActivity.this,MediaActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(Constants.MEDIA_MODEL_KEY,mediaModel);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+                });
+        return fragment;
     }
 
-    private void switchToMediaListFragment(){
-        isMediaListFragmentShown = true;
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container,mediaListFragment,MediaListFragment.TAG)
-                .commit();
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString(ALBUM_PATH_KEY,albumPath);
         super.onSaveInstanceState(outState);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -106,10 +90,6 @@ public class AlbumDetailActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(!isMediaListFragmentShown){
-            switchToMediaListFragment();
-            return;
-        }
         super.onBackPressed();
     }
 }

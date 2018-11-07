@@ -1,6 +1,7 @@
 package com.tejasbhitle.gallery.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +22,18 @@ public class MediaFragment extends Fragment {
     private MediaModel mediaModel;
     private MediaFragmentListener mediaFragmentListener;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
+    }
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_media,container,false);
         imageView = view.findViewById(R.id.media_image);
 
@@ -46,6 +56,6 @@ public class MediaFragment extends Fragment {
     }
 
     public interface MediaFragmentListener{
-        void showMediaFragment();
+
     }
 }

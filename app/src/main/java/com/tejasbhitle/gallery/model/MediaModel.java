@@ -1,5 +1,7 @@
 package com.tejasbhitle.gallery.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,7 +16,8 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 
-public class MediaModel extends AbstractItem<MediaModel, MediaModel.ViewHolder> {
+public class MediaModel extends AbstractItem<MediaModel, MediaModel.ViewHolder>
+        implements Parcelable {
 
     private final static int TYPE_ID = 683881;
     private File file;
@@ -71,4 +74,29 @@ public class MediaModel extends AbstractItem<MediaModel, MediaModel.ViewHolder> 
         }
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeSerializable(this.file);
+    }
+
+    protected MediaModel(Parcel in) {
+        this.file = (File) in.readSerializable();
+    }
+
+    public static final Parcelable.Creator<MediaModel> CREATOR = new Parcelable.Creator<MediaModel>() {
+        @Override
+        public MediaModel createFromParcel(Parcel source) {
+            return new MediaModel(source);
+        }
+
+        @Override
+        public MediaModel[] newArray(int size) {
+            return new MediaModel[size];
+        }
+    };
 }

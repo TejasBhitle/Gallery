@@ -26,6 +26,9 @@
 
         <activity android:name=".activity.AlbumDetailActivity"
             android:parentActivityName=".activity.MainActivity"/>
+
+        <activity android:name=".activity.MediaActivity"
+            android:parentActivityName=".activity.AlbumDetailActivity"/>
     </application>
 
 </manifest>

@@ -42,6 +42,7 @@ public class MediaListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(TAG,"onCreate");
 
         // retain this fragment when activity is re-initialized
         setRetainInstance(true);
@@ -57,6 +58,7 @@ public class MediaListFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState
     ) {
+        Log.e(TAG,"onCreateView");
         View view = inflater.inflate(R.layout.fragment_media_list,container,false);
 
 
@@ -86,14 +88,11 @@ public class MediaListFragment extends Fragment {
                 .getDefaultDisplay()
                 .getOrientation();
 
-        if(screenOrientation == Surface.ROTATION_90 || screenOrientation == Surface.ROTATION_270){
+        if(screenOrientation == Surface.ROTATION_90 || screenOrientation == Surface.ROTATION_270)
             ((GridLayoutManager)recyclerView.getLayoutManager()).setSpanCount(4);
-
-        }
-        else{
+        else
             ((GridLayoutManager)recyclerView.getLayoutManager()).setSpanCount(2);
 
-        }
         getAllMedia(path);
     }
 
@@ -105,6 +104,7 @@ public class MediaListFragment extends Fragment {
 
 
     public void setMediaListFragmentListener(MediaListFragmentListener l){
+        Log.e(TAG,"setMediaListFragmentListener");
         this.mediaListFragmentListener = l;
     }
 

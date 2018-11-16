@@ -2,7 +2,6 @@ package com.tejasbhitle.gallery.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.nfc.Tag;
 import android.util.Log;
 
 import com.tejasbhitle.gallery.model.AlbumModel;
@@ -36,7 +35,7 @@ public class FileHandler {
         File[] files = BASEDIR.listFiles();
         for(File file : files){
             if (isAlbumValid(file)){
-                File[] imagesFiles = file.listFiles(new ImageFileFilter());
+                File[] imagesFiles = file.listFiles(new MediaFileFilter());
                 if(imagesFiles.length > 0){
                     albums.add(new AlbumModel(file, imagesFiles.length));
                 }
@@ -62,7 +61,7 @@ public class FileHandler {
         Log.e(TAG,absPath);
         List<MediaModel> mediaModels = new ArrayList<>();
         File album = new File(absPath);
-        File[] files = album.listFiles(new ImageFileFilter());
+        File[] files = album.listFiles(new MediaFileFilter());
         if(files == null) return mediaModels;
         for(File file : files){
             mediaModels.add(new MediaModel(file));
@@ -71,7 +70,7 @@ public class FileHandler {
     }
 
     public static File getThumbnail(File file){
-        for(File f : file.listFiles(new ImageFileFilter())){
+        for(File f : file.listFiles(new MediaFileFilter())){
             if(!f.isDirectory())
                 return f;
         }

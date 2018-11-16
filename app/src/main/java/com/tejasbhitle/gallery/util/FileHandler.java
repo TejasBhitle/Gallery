@@ -57,6 +57,8 @@ public class FileHandler {
     }
 
     public static List<MediaModel> getAllMedia(String absPath){
+        if(absPath == null)
+            throw new NullPointerException("absPath is null");
         Log.e(TAG,absPath);
         List<MediaModel> mediaModels = new ArrayList<>();
         File album = new File(absPath);
@@ -74,6 +76,10 @@ public class FileHandler {
                 return f;
         }
         return null;
+    }
+
+    public static File getParentDirectoryFromFile(File file){
+        return new File(file.getParent());
     }
 
 }

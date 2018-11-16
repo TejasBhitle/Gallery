@@ -1,5 +1,7 @@
 package com.tejasbhitle.gallery.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -7,6 +9,8 @@ import android.view.MenuItem;
 import com.tejasbhitle.gallery.R;
 import com.tejasbhitle.gallery.fragment.MediaFragment;
 import com.tejasbhitle.gallery.util.Constants;
+
+import java.io.InputStream;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,16 +33,32 @@ public class MediaActivity extends AppCompatActivity {
 
         }
         else{
+            callMediaFragment(getIntent());
+        }
+    }
 
-            Bundle bundle = getIntent().getExtras();
-            if(bundle != null){
-                mediaFragment = getMediaFragment();
-                mediaFragment.setArgs(bundle);
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.fragment_container,mediaFragment, MediaFragment.TAG)
-                        .commit();
+    private void callMediaFragment(Intent intent){
+        Uri uri = intent.getData();
+        Bundle bundle = new Bundle();
+        if(uri != null){
+            Log.e(TAG,uri.toString());
+            bundle.putBoolean(Constants.IS_CALLED_FROM_OUTSIDE,true);
+            bundle.putParcelable(Constants.FILE_URI,uri);
+        }
+        else{
+            Bundle extras = intent.getExtras();
+            if(extras != null) {
+                bundle.putBoolean(Constants.IS_CALLED_FROM_OUTSIDE,false);
+                bundle.putString(Constants.ABS_FILE_PATH, extras.getString(Constants.ABS_FILE_PATH));
+                bundle.putInt(Constants.FILE_POSITION_KEY, extras.getInt(Constants.FILE_POSITION_KEY));
             }
         }
+
+        mediaFragment = getMediaFragment();
+        mediaFragment.setArgs(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container,mediaFragment, MediaFragment.TAG)
+                .commit();
     }
 
 

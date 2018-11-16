@@ -45,7 +45,7 @@ public class MediaPagerAdapter extends PagerAdapter {
                 .into(imageView);
 
         imageView.getController().getSettings()
-                .setMaxZoom(2f)
+                .setMaxZoom(4f)
                 .setDoubleTapZoom(-1f) // Falls back to max zoom level
                 .setPanEnabled(true)
                 .setZoomEnabled(true)

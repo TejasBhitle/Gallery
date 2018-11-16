@@ -58,7 +58,7 @@ public class MediaPagerAdapter extends PagerAdapter {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);//, ));
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setDataAndType(Uri.parse(mediaModel.getFile().getPath()),"video/*");
                     context.startActivity(intent);
                 }

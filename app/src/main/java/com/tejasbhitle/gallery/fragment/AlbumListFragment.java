@@ -34,6 +34,7 @@ public class AlbumListFragment extends Fragment
 
 
     public static final String TAG = "ALBUM_LIST_FRAGMENT";
+    private static final String BUNDLE_RECYCLERVIEW_LAYOUT = "BUNDLE_RECYCLERVIEW_LAYOUT";
 
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
@@ -73,6 +74,7 @@ public class AlbumListFragment extends Fragment
             }
         });
         gridLayoutManager = new GridLayoutManager(getContext(),2);
+        fetchImageAlbums();
         recyclerView.setLayoutManager(gridLayoutManager);
 
         return view;
@@ -96,7 +98,23 @@ public class AlbumListFragment extends Fragment
             ((GridLayoutManager)recyclerView.getLayoutManager()).setSpanCount(2);
 
         }
-        fetchImageAlbums();
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if(savedInstanceState != null)
+        {
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLERVIEW_LAYOUT);
+            recyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(BUNDLE_RECYCLERVIEW_LAYOUT, recyclerView.getLayoutManager().onSaveInstanceState());
     }
 
     @Override

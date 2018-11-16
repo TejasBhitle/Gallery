@@ -3,6 +3,7 @@ package com.tejasbhitle.gallery.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -31,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MediaListFragment extends Fragment {
 
     public static final String TAG = "MEDIA_LIST_FRAGMENT";
+    private static final String BUNDLE_RECYCLER_LAYOUT = "BUNDLE_RECYCLER_LAYOUT";
 
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
@@ -73,6 +75,7 @@ public class MediaListFragment extends Fragment {
             }
         });
         gridLayoutManager = new GridLayoutManager(getContext(),2);
+        getAllMedia(path);
         recyclerView.setLayoutManager(gridLayoutManager);
         return view;
     }
@@ -91,7 +94,24 @@ public class MediaListFragment extends Fragment {
         else
             ((GridLayoutManager)recyclerView.getLayoutManager()).setSpanCount(2);
 
-        getAllMedia(path);
+
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if(savedInstanceState != null)
+        {
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
+            recyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, recyclerView.getLayoutManager().onSaveInstanceState());
     }
 
     private void getAllMedia(String absAlbumPath){

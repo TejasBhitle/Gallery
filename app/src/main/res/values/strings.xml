@@ -9,4 +9,8 @@
     <string name="first_category">First Category</string>
     <string name="storage_permission_needed">Storage permission is needed for the app to work</string>
 
+    <string name="sort_by_name">By Name</string>
+    <string name="sort">Sort</string>
+    <string name="sort_by_date">By Date</string>
+
 </resources>

@@ -1,15 +1,18 @@
 package com.tejasbhitle.gallery.util;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.tejasbhitle.gallery.enums.Sort;
 import com.tejasbhitle.gallery.model.AlbumModel;
 import com.tejasbhitle.gallery.R;
 import com.tejasbhitle.gallery.model.MediaModel;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import androidx.preference.PreferenceManager;
@@ -19,13 +22,56 @@ public class FileHandler {
     private static final String TAG = "FileHandler";
     private static boolean showHidden = false;
 
-    public static List<AlbumModel> getImageAlbumsUtil(Context context, String path){
+    @TargetApi(24)
+    public static List<AlbumModel> getImageAlbumsUtil(Context context, String path, Sort albumSortBy){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         showHidden = prefs.getBoolean(
                 context.getString(R.string.prefs_show_hidden),
                 false
         );
-        return getImageAlbums(path);
+        List<AlbumModel> albums = getImageAlbums(path);
+        Comparator<AlbumModel> comparator = null;
+        switch (albumSortBy){
+            case NAME_ASCEND:
+                comparator = new Comparator<AlbumModel>() {
+                    @Override
+                    public int compare(AlbumModel o1, AlbumModel o2) {
+                        int result = o1.getName().compareTo(o2.getName());
+                        if(result == 0) return 0;
+                        return result/Math.abs(result);
+                    }
+                };
+                break;
+            case NAME_DESCEND:
+                comparator = new Comparator<AlbumModel>() {
+                    @Override
+                    public int compare(AlbumModel o1, AlbumModel o2) {
+                        int result = o1.getName().compareTo(o2.getName());
+                        if(result == 0) return 0;
+                        return -(result/Math.abs(result));
+                    }
+                };
+                break;
+            case DATE_ASCEND:
+                comparator = new Comparator<AlbumModel>() {
+                    @Override
+                    public int compare(AlbumModel o1, AlbumModel o2) {
+                        return Math.toIntExact(o1.getFile().lastModified() - o2.getFile().lastModified());
+                    }
+                };
+                break;
+            case DATE_DESCEND:
+                comparator = new Comparator<AlbumModel>() {
+                    @Override
+                    public int compare(AlbumModel o1, AlbumModel o2) {
+                        return -(Math.toIntExact(o1.getFile().lastModified() - o2.getFile().lastModified()));
+                    }
+                };
+                break;
+
+        }
+        albums.sort(comparator);
+        return albums;
     }
 
     private static List<AlbumModel> getImageAlbums(String path){
@@ -75,10 +121,6 @@ public class FileHandler {
                 return f;
         }
         return null;
-    }
-
-    public static File getParentDirectoryFromFile(File file){
-        return new File(file.getParent());
     }
 
 }

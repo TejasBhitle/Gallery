@@ -19,6 +19,7 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
 import com.tejasbhitle.gallery.R;
 import com.tejasbhitle.gallery.activity.AlbumDetailActivity;
+import com.tejasbhitle.gallery.enums.Sort;
 import com.tejasbhitle.gallery.model.AlbumModel;
 import com.tejasbhitle.gallery.util.Constants;
 import com.tejasbhitle.gallery.util.FileHandler;
@@ -26,6 +27,7 @@ import com.tejasbhitle.gallery.util.FileHandler;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -76,7 +78,6 @@ public class AlbumListFragment extends Fragment
         gridLayoutManager = new GridLayoutManager(getContext(),2);
         fetchImageAlbums();
         recyclerView.setLayoutManager(gridLayoutManager);
-
         return view;
     }
 
@@ -84,6 +85,9 @@ public class AlbumListFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
+        PreferenceManager.getDefaultSharedPreferences(getContext())
+                .registerOnSharedPreferenceChangeListener(this);
+
 
         int screenOrientation = ((WindowManager) getContext()
                 .getSystemService(Context.WINDOW_SERVICE))
@@ -98,6 +102,13 @@ public class AlbumListFragment extends Fragment
             ((GridLayoutManager)recyclerView.getLayoutManager()).setSpanCount(2);
 
         }
+    }
+
+    @Override
+    public void onPause() {
+        PreferenceManager.getDefaultSharedPreferences(getContext())
+                .unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
     }
 
     @Override
@@ -119,16 +130,23 @@ public class AlbumListFragment extends Fragment
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
-        if(key.equals(getString(R.string.prefs_show_hidden))){
-            fetchImageAlbums();
-        }
+        Log.e(TAG,"onSharedPreferenceChanged");
+        fetchImageAlbums();
+        
+    }
+
+    private Sort getSort(){
+        String sort = PreferenceManager.getDefaultSharedPreferences(getContext())
+                .getString(Constants.PREF_ALBUM_SORT,Sort.NAME_ASCEND.toString());
+        return Sort.getSort(sort);
     }
 
     private void fetchImageAlbums(){
         itemAdapter.clear();
         itemAdapter.add(FileHandler.getImageAlbumsUtil(
                 getActivity(),
-                Environment.getExternalStorageDirectory().getPath()
+                Environment.getExternalStorageDirectory().getPath(),
+                getSort()
         ));
         recyclerView.setAdapter(fastAdapter);
     }

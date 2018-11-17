@@ -9,4 +9,5 @@ public class Constants {
     public static final String FILE_POSITION_KEY = "FILE_POSITION_KEY";
     public static final String IS_CALLED_FROM_OUTSIDE = "IS_CALLED_FROM_OUTSIDE";
     public static final String FILE_URI = "FILE_URI";
+    public static final String PREF_ALBUM_SORT = "PREF_ALBUM_SORT";
 }

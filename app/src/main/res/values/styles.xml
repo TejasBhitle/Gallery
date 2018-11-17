@@ -8,4 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="RecyclerCardTheme" parent="Base.CardView">
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">4dp</item>
+        <item name="android:layout_margin">2dp</item>
+    </style>
+
+    <style name="LightBorderTheme" parent="Base.Theme.AppCompat">
+        <item name="android:background">@drawable/card_border</item>
+    </style>
 </resources>

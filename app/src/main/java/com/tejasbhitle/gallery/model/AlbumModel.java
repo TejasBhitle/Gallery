@@ -68,14 +68,14 @@ public class AlbumModel extends AbstractItem<AlbumModel, AlbumModel.ViewHolder> 
     public static class ViewHolder extends FastAdapter.ViewHolder<AlbumModel> {
 
 
-        TextView album_name,album_path,album_size;
+        TextView album_name,album_size;//,album_path;
         ImageView album_image;
         Context context;
 
         ViewHolder(View view){
             super(view);
             album_name = view.findViewById(R.id.album_name);
-            album_path = view.findViewById(R.id.album_path);
+            //album_path = view.findViewById(R.id.album_path);
             album_size = view.findViewById(R.id.album_size);
             album_image = view.findViewById(R.id.album_image);
             context = view.getContext();
@@ -84,8 +84,8 @@ public class AlbumModel extends AbstractItem<AlbumModel, AlbumModel.ViewHolder> 
         @Override
         public void bindView(AlbumModel item, List<Object> payloads) {
             album_name.setText(item.getName());
-            album_path.setText(item.getFilePath().replace(Constants.INTERNAL_STORAGE_PATH,"/"));
-            album_size.setText(String.valueOf(item.getNumOfFiles()));
+            //album_path.setText(item.getFilePath().replace(Constants.INTERNAL_STORAGE_PATH,"/"));
+            album_size.setText("("+String.valueOf(item.getNumOfFiles())+")");
 
             MediaModel media = new MediaModel(FileHandler.getThumbnail(item.getFile()));
             if(media.isVideoFile()){

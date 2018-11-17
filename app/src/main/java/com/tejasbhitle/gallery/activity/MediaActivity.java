@@ -10,10 +10,9 @@ import com.tejasbhitle.gallery.R;
 import com.tejasbhitle.gallery.fragment.MediaFragment;
 import com.tejasbhitle.gallery.util.Constants;
 
-import java.io.InputStream;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class MediaActivity extends AppCompatActivity {
 
@@ -24,6 +23,10 @@ public class MediaActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media);
+
+        setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mediaFragment = getMediaFragment();
         if(savedInstanceState != null){

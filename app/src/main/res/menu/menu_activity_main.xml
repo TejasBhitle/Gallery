@@ -2,7 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/menu_item_sort_albums"
-        android:title="@string/sort">
+        android:title="@string/sort"
+        android:icon="@drawable/ic_sort_black_24dp">
         <menu>
             <item
                 android:id="@+id/menu_item_sort_album_by_name"
@@ -15,6 +16,7 @@
 
     <item
         android:id="@+id/menu_item_settings"
-        android:title="@string/settings"/>
+        android:title="@string/settings"
+        android:icon="@drawable/ic_settings_black_24dp"/>
 
 </menu>

@@ -4,9 +4,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.tejasbhitle.gallery.R;
 import com.tejasbhitle.gallery.adapter.MediaPagerAdapter;
 import com.tejasbhitle.gallery.model.MediaModel;
@@ -26,6 +28,7 @@ public class MediaFragment extends Fragment {
 
     public static final String TAG = "MEDIA_FRAGMENT";
     private ViewPager viewpager;
+    private BottomNavigationView bottomBar;
     private String absAlbumPath;
     private Integer position;
     private MediaFragmentListener mediaFragmentListener;
@@ -48,7 +51,8 @@ public class MediaFragment extends Fragment {
         viewpager = view.findViewById(R.id.viewpager);
         setViewpager(viewpager);
 
-
+        bottomBar = view.findViewById(R.id.bottomNavigationView);
+        setBottomBar(bottomBar);
         return view;
     }
 
@@ -78,6 +82,25 @@ public class MediaFragment extends Fragment {
             }
         }
         viewpager.setCurrentItem(position);
+    }
+
+    private void setBottomBar(BottomNavigationView bottomBar){
+        bottomBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.bottom_bar_item_copy:
+                        break;
+                    case R.id.bottom_bar_item_delete:
+                        break;
+                    case R.id.bottom_bar_item_share:
+                        break;
+                    case R.id.bottom_bar_item_info:
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     public void setArgs(Bundle bundle){

@@ -12,6 +12,7 @@ import com.tejasbhitle.gallery.util.Constants;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class AlbumDetailActivity extends AppCompatActivity {
 
@@ -25,7 +26,6 @@ public class AlbumDetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album_detail);
-
 
         if(savedInstanceState != null){
 
@@ -46,7 +46,10 @@ public class AlbumDetailActivity extends AppCompatActivity {
                     .add(R.id.fragment_container,mediaListFragment, MediaListFragment.TAG)
                     .commit();
         }
-        setTitle(albumPath.substring(albumPath.lastIndexOf("/")+1,albumPath.length()));
+
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setTitle(albumPath.substring(albumPath.lastIndexOf("/")+1,albumPath.length()));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 

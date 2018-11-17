@@ -12,5 +12,10 @@
     <string name="sort_by_name">By Name</string>
     <string name="sort">Sort</string>
     <string name="sort_by_date">By Date</string>
+    <string name="cut">Cut</string>
+    <string name="share">Share</string>
+    <string name="copy">Copy</string>
+    <string name="delete">Delete</string>
+    <string name="info">Info</string>
 
 </resources>

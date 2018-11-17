@@ -7,6 +7,7 @@ import com.tejasbhitle.gallery.R;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -14,6 +15,10 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
+        getSupportActionBar().setTitle(getString(R.string.settings));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

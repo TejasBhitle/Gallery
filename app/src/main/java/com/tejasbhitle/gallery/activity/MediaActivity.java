@@ -5,7 +5,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.tejasbhitle.gallery.R;
 import com.tejasbhitle.gallery.fragment.MediaFragment;
 import com.tejasbhitle.gallery.util.Constants;
@@ -18,11 +20,21 @@ public class MediaActivity extends AppCompatActivity {
 
     private static final String TAG = "MediaActivity";
     private MediaFragment mediaFragment;
+    private AppBarLayout appBarLayout;
+    boolean isExpanded = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media);
+
+        appBarLayout = findViewById(R.id.appBarLayout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                isExpanded = (verticalOffset == 0);
+            }
+        });
 
         setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
         getSupportActionBar().setTitle("");
@@ -33,11 +45,13 @@ public class MediaActivity extends AppCompatActivity {
 
             mediaFragment = (MediaFragment) getSupportFragmentManager()
                     .findFragmentByTag(MediaFragment.TAG);
+            mediaFragment = setMediaFragmentListener(mediaFragment);
 
         }
         else{
             callMediaFragment(getIntent());
         }
+        switchFullScreen();//switch to full screen initially
     }
 
     private void callMediaFragment(Intent intent){
@@ -64,18 +78,41 @@ public class MediaActivity extends AppCompatActivity {
                 .commit();
     }
 
+    private void switchFullScreen(){
+        appBarLayout.setExpanded(!isExpanded,true);
 
-    /*@Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(Constants.ABS_FILE_PATH, absAlbumPath);
-        super.onSaveInstanceState(outState);
-    }*/
+        View decorView = getWindow().getDecorView();
+        if(isExpanded) {
+            /* Make it full screen */
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
+        else {
+            /* Switch to normal */
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+        }
 
+    }
 
     private MediaFragment getMediaFragment(){
         MediaFragment fragment = new MediaFragment();
+        fragment = setMediaFragmentListener(fragment);
+        return fragment;
+    }
+
+    private MediaFragment setMediaFragmentListener(MediaFragment fragment){
+        if(fragment == null) return null;
         fragment.setMediaFragmentListener(
                 new MediaFragment.MediaFragmentListener() {
+                    @Override
+                    public void onMediaClick() {
+                        switchFullScreen();
+                    }
                 });
         return fragment;
     }

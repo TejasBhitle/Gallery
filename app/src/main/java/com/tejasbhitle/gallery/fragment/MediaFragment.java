@@ -15,8 +15,6 @@ import com.tejasbhitle.gallery.model.MediaModel;
 import com.tejasbhitle.gallery.util.Constants;
 import com.tejasbhitle.gallery.util.FileHandler;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -70,7 +68,18 @@ public class MediaFragment extends Fragment {
         }
 
         mediaModels = FileHandler.getAllMedia(absAlbumPath);
-        viewpager.setAdapter(new MediaPagerAdapter(mediaModels,getContext()));
+        viewpager.setAdapter(new MediaPagerAdapter(mediaModels, getContext(),
+                new MediaPagerAdapter.PagerOnClickListener() {
+                    @Override
+                    public void onClick() {
+                        mediaFragmentListener.onMediaClick();
+                        if(bottomBar.isShown()){
+                            bottomBar.setVisibility(View.GONE);
+                        }
+                        else
+                            bottomBar.setVisibility(View.VISIBLE);
+                    }
+                }));
 
         if(IS_CALLED_FROM_OUTSIDE){
             /*Calculate the position of the clicked file to set viewpager position*/
@@ -85,6 +94,7 @@ public class MediaFragment extends Fragment {
     }
 
     private void setBottomBar(BottomNavigationView bottomBar){
+        bottomBar.setVisibility(View.GONE);
         bottomBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -102,6 +112,7 @@ public class MediaFragment extends Fragment {
             }
         });
     }
+
 
     public void setArgs(Bundle bundle){
         this.IS_CALLED_FROM_OUTSIDE = bundle.getBoolean(Constants.IS_CALLED_FROM_OUTSIDE);
@@ -121,5 +132,7 @@ public class MediaFragment extends Fragment {
         this.mediaFragmentListener = l;
     }
 
-    public interface MediaFragmentListener{ }
+    public interface MediaFragmentListener{
+        void onMediaClick();
+    }
 }

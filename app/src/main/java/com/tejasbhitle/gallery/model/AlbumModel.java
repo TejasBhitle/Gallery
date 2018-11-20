@@ -104,8 +104,6 @@ public class AlbumModel extends AbstractItem<AlbumModel, AlbumModel.ViewHolder> 
 
         @Override
         public void unbindView(AlbumModel item) {
-            //album_name.setText(null);
-            //album_image.setImageBitmap(null);
         }
     }
 }

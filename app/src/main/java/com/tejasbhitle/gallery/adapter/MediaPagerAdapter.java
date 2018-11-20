@@ -23,12 +23,13 @@ public class MediaPagerAdapter extends PagerAdapter {
 
     List<MediaModel> mediaModels;
     Context context;
-    //Picasso picassoInstance;
+    PagerOnClickListener pagerOnClickListener;
 
 
-    public MediaPagerAdapter(List<MediaModel> mediaModels,Context context){
+    public MediaPagerAdapter(List<MediaModel> mediaModels,Context context, PagerOnClickListener listener){
         this.mediaModels = mediaModels;
         this.context = context;
+        this.pagerOnClickListener = listener;
     }
 
     @NonNull
@@ -75,6 +76,15 @@ public class MediaPagerAdapter extends PagerAdapter {
                     .setFillViewport(false)
                     .setFitMethod(Settings.Fit.INSIDE)
                     .setGravity(Gravity.CENTER);
+
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(pagerOnClickListener != null && !mediaModel.isVideoFile()){
+                        pagerOnClickListener.onClick();
+                    }
+                }
+            });
         }
 
         container.addView(view);
@@ -94,5 +104,9 @@ public class MediaPagerAdapter extends PagerAdapter {
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
         return view == object;
+    }
+
+    public interface PagerOnClickListener{
+        public void onClick();
     }
 }

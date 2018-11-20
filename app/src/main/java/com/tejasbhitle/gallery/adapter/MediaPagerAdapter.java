@@ -2,10 +2,7 @@ package com.tejasbhitle.gallery.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +10,10 @@ import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.views.GestureImageView;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.tejasbhitle.gallery.R;
 import com.tejasbhitle.gallery.model.MediaModel;
-import com.tejasbhitle.gallery.util.VideoRequestHandler;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -28,15 +23,12 @@ public class MediaPagerAdapter extends PagerAdapter {
 
     List<MediaModel> mediaModels;
     Context context;
-    Picasso picassoInstance;
+    //Picasso picassoInstance;
 
 
     public MediaPagerAdapter(List<MediaModel> mediaModels,Context context){
         this.mediaModels = mediaModels;
         this.context = context;
-        this.picassoInstance = new Picasso.Builder(context)
-                .addRequestHandler(new VideoRequestHandler())
-                .build();
     }
 
     @NonNull
@@ -49,10 +41,10 @@ public class MediaPagerAdapter extends PagerAdapter {
         GestureImageView imageView = view.findViewById(R.id.media_image);
 
         if(mediaModel.isVideoFile()){
-            this.picassoInstance
-                    .load(VideoRequestHandler.SCHEME_VIDEO+":"+mediaModel.getFile().getPath())
-                    .fit()
-                    .centerInside()
+
+            Glide.with(context)
+                    .load(mediaModel.getFile())
+                    .thumbnail(0.1f)
                     .into(imageView);
 
             imageView.setOnClickListener(new View.OnClickListener() {
@@ -66,10 +58,8 @@ public class MediaPagerAdapter extends PagerAdapter {
 
         }else {
 
-            Picasso.get()
+            Glide.with(context)
                     .load(mediaModel.getFile())
-                    .fit()
-                    .centerInside()
                     .into(imageView);
 
             imageView.getController().getSettings()

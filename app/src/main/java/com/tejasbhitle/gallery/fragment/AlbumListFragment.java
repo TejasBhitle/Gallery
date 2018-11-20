@@ -12,6 +12,7 @@ import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -81,7 +82,6 @@ public class AlbumListFragment extends Fragment
         return view;
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -94,14 +94,11 @@ public class AlbumListFragment extends Fragment
                 .getDefaultDisplay()
                 .getOrientation();
 
-        if(screenOrientation == Surface.ROTATION_90 || screenOrientation == Surface.ROTATION_270){
+        if(screenOrientation == Surface.ROTATION_90 || screenOrientation == Surface.ROTATION_270)
             ((GridLayoutManager)recyclerView.getLayoutManager()).setSpanCount(4);
-
-        }
-        else{
+        else
             ((GridLayoutManager)recyclerView.getLayoutManager()).setSpanCount(2);
 
-        }
     }
 
     @Override
@@ -130,9 +127,7 @@ public class AlbumListFragment extends Fragment
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
-        Log.e(TAG,"onSharedPreferenceChanged");
         fetchImageAlbums();
-        
     }
 
     private Sort getSort(){

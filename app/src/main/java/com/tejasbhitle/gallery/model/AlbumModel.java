@@ -1,18 +1,16 @@
 package com.tejasbhitle.gallery.model;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import com.squareup.picasso.Picasso;
 import com.tejasbhitle.gallery.R;
-import com.tejasbhitle.gallery.util.Constants;
 import com.tejasbhitle.gallery.util.FileHandler;
-import com.tejasbhitle.gallery.util.VideoRequestHandler;
 
 import java.io.File;
 import java.util.List;
@@ -89,26 +87,25 @@ public class AlbumModel extends AbstractItem<AlbumModel, AlbumModel.ViewHolder> 
 
             MediaModel media = new MediaModel(FileHandler.getThumbnail(item.getFile()));
             if(media.isVideoFile()){
-                new Picasso.Builder(context)
-                        .addRequestHandler(new VideoRequestHandler())
-                        .build()
-                        .load(VideoRequestHandler.SCHEME_VIDEO+":"+media.getFile().getPath())
-                        .fit()
-                        .centerCrop()
+                Glide.with(context)
+                        .load(media.getFile())
+                        .apply(new RequestOptions().fitCenter().centerCrop())
+                        .thumbnail(0.1f)
                         .into(album_image);
             }
             else {
-                Picasso.get()
+                Glide.with(context)
                         .load(media.getFile())
-                        .fit()
-                        .centerCrop()
+                        .apply(new RequestOptions().fitCenter().centerCrop())
                         .into(album_image);
+
             }
         }
 
         @Override
         public void unbindView(AlbumModel item) {
-            album_name.setText(null);
+            //album_name.setText(null);
+            //album_image.setImageBitmap(null);
         }
     }
 }

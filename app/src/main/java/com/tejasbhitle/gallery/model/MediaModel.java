@@ -1,20 +1,17 @@
 package com.tejasbhitle.gallery.model;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import com.squareup.picasso.Picasso;
 import com.tejasbhitle.gallery.R;
-import com.tejasbhitle.gallery.util.VideoRequestHandler;
 
 import java.io.File;
 import java.net.URLConnection;
@@ -83,19 +80,17 @@ public class MediaModel extends AbstractItem<MediaModel, MediaModel.ViewHolder>
         @Override
         public void bindView(MediaModel item, List<Object> payloads) {
             if(item.isVideoFile()){
-                new Picasso.Builder(context)
-                        .addRequestHandler(new VideoRequestHandler())
-                        .build()
-                        .load(VideoRequestHandler.SCHEME_VIDEO+":"+item.getFile().getPath())
-                        .fit()
-                        .centerCrop()
+
+                Glide.with(context)
+                        .load(item.file)
+                        .apply(new RequestOptions().fitCenter().centerCrop())
+                        .thumbnail(0.1f)
                         .into(media_image);
             }
             else {
-                Picasso.get()
+                Glide.with(context)
                         .load(item.file)
-                        .fit()
-                        .centerCrop()
+                        .apply(new RequestOptions().fitCenter().centerCrop())
                         .into(media_image);
             }
         }

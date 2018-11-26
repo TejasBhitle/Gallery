@@ -1,6 +1,8 @@
 package com.tejasbhitle.gallery.model;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -72,15 +74,23 @@ public class AlbumModel extends AbstractItem<AlbumModel, AlbumModel.ViewHolder> 
 
         ViewHolder(View view){
             super(view);
+            context = view.getContext();
             album_name = view.findViewById(R.id.album_name);
             //album_path = view.findViewById(R.id.album_path);
             album_size = view.findViewById(R.id.album_size);
             album_image = view.findViewById(R.id.album_image);
-            context = view.getContext();
+
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            album_image.getLayoutParams().height = (displayMetrics.heightPixels)/4;
+            album_image.requestLayout();
+
+
         }
 
         @Override
         public void bindView(AlbumModel item, List<Object> payloads) {
+
             album_name.setText(item.getName());
             //album_path.setText(item.getFilePath().replace(Constants.INTERNAL_STORAGE_PATH,"/"));
             album_size.setText("("+String.valueOf(item.getNumOfFiles())+")");

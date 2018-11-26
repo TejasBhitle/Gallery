@@ -21,7 +21,7 @@ public class MediaActivity extends AppCompatActivity {
     private static final String TAG = "MediaActivity";
     private MediaFragment mediaFragment;
     private AppBarLayout appBarLayout;
-    boolean isExpanded = true;
+    private boolean isAppBarExpanded = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,12 +29,7 @@ public class MediaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_media);
 
         appBarLayout = findViewById(R.id.appBarLayout);
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                isExpanded = (verticalOffset == 0);
-            }
-        });
+
 
         setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
         getSupportActionBar().setTitle("");
@@ -51,7 +46,6 @@ public class MediaActivity extends AppCompatActivity {
         else{
             callMediaFragment(getIntent());
         }
-        switchFullScreen();//switch to full screen initially
     }
 
     private void callMediaFragment(Intent intent){
@@ -78,27 +72,6 @@ public class MediaActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void switchFullScreen(){
-        appBarLayout.setExpanded(!isExpanded,true);
-
-        View decorView = getWindow().getDecorView();
-        if(isExpanded) {
-            /* Make it full screen */
-            decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
-        else {
-            /* Switch to normal */
-            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-        }
-
-    }
-
     private MediaFragment getMediaFragment(){
         MediaFragment fragment = new MediaFragment();
         fragment = setMediaFragmentListener(fragment);
@@ -110,8 +83,9 @@ public class MediaActivity extends AppCompatActivity {
         fragment.setMediaFragmentListener(
                 new MediaFragment.MediaFragmentListener() {
                     @Override
-                    public void onMediaClick() {
-                        switchFullScreen();
+                    public void onMediaClick(int visibility) {
+                        isAppBarExpanded = !isAppBarExpanded;
+                        appBarLayout.setExpanded(!isAppBarExpanded,true);
                     }
                 });
         return fragment;

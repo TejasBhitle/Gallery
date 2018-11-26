@@ -74,7 +74,8 @@ public class MediaListFragment extends Fragment {
                 return false;
             }
         });
-        gridLayoutManager = new GridLayoutManager(getContext(),2);
+        int factor = 4;
+        gridLayoutManager = new GridLayoutManager(getContext(),factor);
         getAllMedia(path);
         recyclerView.setLayoutManager(gridLayoutManager);
         return view;
@@ -90,9 +91,9 @@ public class MediaListFragment extends Fragment {
                 .getOrientation();
 
         if(screenOrientation == Surface.ROTATION_90 || screenOrientation == Surface.ROTATION_270)
-            ((GridLayoutManager)recyclerView.getLayoutManager()).setSpanCount(4);
+            ((GridLayoutManager)recyclerView.getLayoutManager()).setSpanCount(8);
         else
-            ((GridLayoutManager)recyclerView.getLayoutManager()).setSpanCount(2);
+            ((GridLayoutManager)recyclerView.getLayoutManager()).setSpanCount(4);
 
 
     }

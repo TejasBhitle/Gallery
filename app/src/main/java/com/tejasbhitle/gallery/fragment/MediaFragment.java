@@ -1,5 +1,6 @@
 package com.tejasbhitle.gallery.fragment;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import com.tejasbhitle.gallery.model.MediaModel;
 import com.tejasbhitle.gallery.util.Constants;
 import com.tejasbhitle.gallery.util.FileHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -67,17 +69,29 @@ public class MediaFragment extends Fragment {
             fileName = mediaPath.substring(slash_index, mediaPath.length());
         }
 
+        ((Activity)getContext()).getWindow().getDecorView()
+                .setOnSystemUiVisibilityChangeListener(
+                        new View.OnSystemUiVisibilityChangeListener() {
+                            @Override
+                            public void onSystemUiVisibilityChange(int visibility) {
+                                mediaFragmentListener.onMediaClick(visibility);
+                                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                                    bottomBar.setVisibility(View.VISIBLE);
+                                }
+                                else{
+                                    bottomBar.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+
         mediaModels = FileHandler.getAllMedia(absAlbumPath);
         viewpager.setAdapter(new MediaPagerAdapter(mediaModels, getContext(),
                 new MediaPagerAdapter.PagerOnClickListener() {
                     @Override
                     public void onClick() {
-                        mediaFragmentListener.onMediaClick();
-                        if(bottomBar.isShown()){
-                            bottomBar.setVisibility(View.GONE);
-                        }
-                        else
-                            bottomBar.setVisibility(View.VISIBLE);
+                        Log.e(TAG,"onCLick");
+                        switchFullScreen();
+
                     }
                 }));
 
@@ -93,17 +107,28 @@ public class MediaFragment extends Fragment {
         viewpager.setCurrentItem(position);
     }
 
+    private void switchFullScreen(){
+
+        View decorView = ((Activity)getContext()).getWindow().getDecorView();
+        int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(flags);
+
+    }
+
     private void setBottomBar(BottomNavigationView bottomBar){
-        bottomBar.setVisibility(View.GONE);
         bottomBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                ArrayList<MediaModel> medias = new ArrayList<>();
+                medias.add(mediaModels.get(viewpager.getCurrentItem()));
                 switch (menuItem.getItemId()){
                     case R.id.bottom_bar_item_copy:
                         break;
                     case R.id.bottom_bar_item_delete:
                         break;
                     case R.id.bottom_bar_item_share:
+                        FileHandler.shareMediaModels(medias,getContext());
                         break;
                     case R.id.bottom_bar_item_info:
                         break;
@@ -133,6 +158,6 @@ public class MediaFragment extends Fragment {
     }
 
     public interface MediaFragmentListener{
-        void onMediaClick();
+        void onMediaClick(int visibility);
     }
 }

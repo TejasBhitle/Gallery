@@ -1,8 +1,10 @@
 package com.tejasbhitle.gallery.model;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -73,8 +75,17 @@ public class MediaModel extends AbstractItem<MediaModel, MediaModel.ViewHolder>
 
         public ViewHolder(View view){
             super(view);
-            media_image = view.findViewById(R.id.media_image);
             context = view.getContext();
+            media_image = view.findViewById(R.id.media_image);
+
+
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+            int width = displayMetrics.widthPixels;
+            int factor = 4;
+            media_image.getLayoutParams().height = width/factor;
+
         }
 
         @Override

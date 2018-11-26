@@ -2,9 +2,12 @@ package com.tejasbhitle.gallery.util;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.util.Log;
 
+import com.tejasbhitle.gallery.BuildConfig;
 import com.tejasbhitle.gallery.enums.Sort;
 import com.tejasbhitle.gallery.model.AlbumModel;
 import com.tejasbhitle.gallery.R;
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
 
 public class FileHandler {
@@ -121,6 +125,19 @@ public class FileHandler {
                 return f;
         }
         return null;
+    }
+
+    public static void shareMediaModels(ArrayList<MediaModel> medias, Context context){
+        ArrayList<Uri> files = new ArrayList<>();
+        for(MediaModel m : medias){
+            Uri uri = FileProvider.getUriForFile(context,
+                    BuildConfig.APPLICATION_ID+".provider",m.getFile());
+            files.add(uri);
+        }
+        Intent intent =  new Intent(Intent.ACTION_SEND_MULTIPLE);
+        intent.setType("*/*");
+        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+        context.startActivity(intent);
     }
 
 }

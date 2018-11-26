@@ -111,7 +111,8 @@ public class MediaFragment extends Fragment {
 
         View decorView = ((Activity)getContext()).getWindow().getDecorView();
         int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
         decorView.setSystemUiVisibility(flags);
 
     }
@@ -128,7 +129,7 @@ public class MediaFragment extends Fragment {
                     case R.id.bottom_bar_item_delete:
                         break;
                     case R.id.bottom_bar_item_share:
-                        FileHandler.shareMediaModels(medias,getContext());
+                        FileHandler.shareMediaModels(medias,menuItem,getContext());
                         break;
                     case R.id.bottom_bar_item_info:
                         break;

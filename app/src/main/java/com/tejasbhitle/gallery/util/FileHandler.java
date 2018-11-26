@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.tejasbhitle.gallery.BuildConfig;
 import com.tejasbhitle.gallery.enums.Sort;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import android.widget.ShareActionProvider;
 import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
 
@@ -127,7 +129,7 @@ public class FileHandler {
         return null;
     }
 
-    public static void shareMediaModels(ArrayList<MediaModel> medias, Context context){
+    public static void shareMediaModels(ArrayList<MediaModel> medias, MenuItem menuItem, Context context){
         ArrayList<Uri> files = new ArrayList<>();
         for(MediaModel m : medias){
             Uri uri = FileProvider.getUriForFile(context,
@@ -137,7 +139,10 @@ public class FileHandler {
         Intent intent =  new Intent(Intent.ACTION_SEND_MULTIPLE);
         intent.setType("*/*");
         intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-        context.startActivity(intent);
+        //context.startActivity(intent);
+
+        ShareActionProvider provider = (ShareActionProvider) menuItem.getActionProvider();
+        provider.setShareIntent(intent);
     }
 
 }

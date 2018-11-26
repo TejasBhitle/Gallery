@@ -1,17 +1,32 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@android:color/white</item>
-        <item name="colorPrimaryDark">@android:color/white</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/pink</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
+    <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/dark</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/pink</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:background">@color/dark</item>
+    </style>
+
+    <style name="AppTheme.Black" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/pink</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:background">@color/black</item>
+    </style>
+
+
     <style name="ToolbarStyle" parent="Widget.AppCompat.Toolbar">
         <item name="android:titleTextColor">@color/text_grey</item>
-        <item name="android:background">@android:color/white</item>
         <item name="android:elevation">0dp</item>
     </style>
 

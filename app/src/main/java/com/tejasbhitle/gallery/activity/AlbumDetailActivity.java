@@ -9,6 +9,7 @@ import com.tejasbhitle.gallery.R;
 import com.tejasbhitle.gallery.fragment.MediaListFragment;
 import com.tejasbhitle.gallery.model.MediaModel;
 import com.tejasbhitle.gallery.util.Constants;
+import com.tejasbhitle.gallery.util.ThemeManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class AlbumDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(ThemeManager.getTheme(this));
         setContentView(R.layout.activity_album_detail);
 
         if(savedInstanceState != null){

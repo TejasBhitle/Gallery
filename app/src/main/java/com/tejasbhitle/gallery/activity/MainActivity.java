@@ -7,6 +7,7 @@ import androidx.preference.PreferenceManager;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,16 +20,20 @@ import com.tejasbhitle.gallery.R;
 import com.tejasbhitle.gallery.enums.Sort;
 import com.tejasbhitle.gallery.fragment.AlbumListFragment;
 import com.tejasbhitle.gallery.util.Constants;
+import com.tejasbhitle.gallery.util.ThemeManager;
 
 public class MainActivity extends AppCompatActivity{
 
     private static final String TAG = "MainActivity";
     private static final int STORAGE_PERMISSION_REQUEST_CODE = 6484;
     private AlbumListFragment albumFragment;
+    int theme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        theme = ThemeManager.getTheme(this);
+        setTheme(theme);
         setContentView(R.layout.activity_main);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
@@ -53,6 +58,20 @@ public class MainActivity extends AppCompatActivity{
                     .commit();
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        if(isThemeChanged()){
+            recreate();
+        }
+
+        super.onResume();
+
+    }
+
+    public boolean isThemeChanged(){
+        return theme != ThemeManager.getTheme(this);
     }
 
     @Override

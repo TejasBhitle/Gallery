@@ -1,6 +1,7 @@
 package com.tejasbhitle.gallery.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.tejasbhitle.gallery.R;
@@ -15,12 +17,14 @@ import com.tejasbhitle.gallery.adapter.MediaPagerAdapter;
 import com.tejasbhitle.gallery.model.MediaModel;
 import com.tejasbhitle.gallery.util.Constants;
 import com.tejasbhitle.gallery.util.FileHandler;
+import com.tejasbhitle.gallery.util.UriHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ShareCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -121,15 +125,14 @@ public class MediaFragment extends Fragment {
         bottomBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                ArrayList<MediaModel> medias = new ArrayList<>();
-                medias.add(mediaModels.get(viewpager.getCurrentItem()));
+                MediaModel media = mediaModels.get(viewpager.getCurrentItem());
                 switch (menuItem.getItemId()){
                     case R.id.bottom_bar_item_copy:
                         break;
                     case R.id.bottom_bar_item_delete:
                         break;
                     case R.id.bottom_bar_item_share:
-                        FileHandler.shareMediaModels(medias,menuItem,getContext());
+                        shareMedia(media);
                         break;
                     case R.id.bottom_bar_item_info:
                         break;
@@ -137,6 +140,26 @@ public class MediaFragment extends Fragment {
                 return true;
             }
         });
+    }
+
+    private void shareMedia(MediaModel media){
+
+        Uri contentUri = UriHandler.getContentUri(getContext(), media);
+
+        Intent shareIntent = ShareCompat.IntentBuilder.from(getActivity())
+                .addStream(contentUri)
+                .setType(media.getMimeType())
+                .getIntent();
+
+
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        if (shareIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)));
+        }
+        else{
+            Toast.makeText(getContext(),getString(R.string.no_apps_found),Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -152,7 +175,6 @@ public class MediaFragment extends Fragment {
             this.position = bundle.getInt(Constants.FILE_POSITION_KEY);
         }
     }
-
 
     public void setMediaFragmentListener(MediaFragmentListener l){
         this.mediaFragmentListener = l;

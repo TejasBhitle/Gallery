@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,8 +22,14 @@ import java.util.Comparator;
 import java.util.List;
 
 import android.widget.ShareActionProvider;
+
+import androidx.core.app.ShareCompat;
 import androidx.core.content.FileProvider;
+import androidx.core.view.ActionProvider;
+import androidx.core.view.MenuItemCompat;
 import androidx.preference.PreferenceManager;
+
+import static androidx.core.content.FileProvider.getUriForFile;
 
 public class FileHandler {
 
@@ -129,20 +137,43 @@ public class FileHandler {
         return null;
     }
 
-    public static void shareMediaModels(ArrayList<MediaModel> medias, MenuItem menuItem, Context context){
-        ArrayList<Uri> files = new ArrayList<>();
-        for(MediaModel m : medias){
-            Uri uri = FileProvider.getUriForFile(context,
-                    BuildConfig.APPLICATION_ID+".provider",m.getFile());
-            files.add(uri);
-        }
-        Intent intent =  new Intent(Intent.ACTION_SEND_MULTIPLE);
-        intent.setType("*/*");
-        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-        //context.startActivity(intent);
+    public static Intent getShareMediaModelsIntent(
+            ArrayList<MediaModel> medias,
+            Context context){
 
-        ShareActionProvider provider = (ShareActionProvider) menuItem.getActionProvider();
-        provider.setShareIntent(intent);
+        ArrayList<Uri> uris = new ArrayList<>();
+        for(MediaModel m : medias){
+            File mediaPath = new File(context.getCacheDir(),"cache_path");
+            File newFile = new File(mediaPath, m.getFile().getName());
+            Uri uri = getUriForFile(context,
+                    BuildConfig.APPLICATION_ID+".provider",
+                    newFile);
+
+            uris.add(uri);
+            Log.e(TAG,uri.toString());
+        }
+        Intent intent =  new Intent(Intent.ACTION_SEND);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_STREAM,uris.get(0));
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+
+        PackageManager packageManager = context.getPackageManager();
+        List<ResolveInfo> resInfoList = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+
+        // Loop the activity list.
+        int size = resInfoList.size();
+        for(int i=0;i<size;i++) {
+            ResolveInfo resolveInfo = resInfoList.get(i);
+            // Get activity package name.
+            String packageName = resolveInfo.activityInfo.packageName;
+
+            // Grant uri permission to each activity.
+            for(int j=0; j<uris.size();j++)
+            context.grantUriPermission(packageName, uris.get(0), Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        }
+
+        return intent;
     }
 
 }

@@ -52,6 +52,11 @@ public class MediaModel extends AbstractItem<MediaModel, MediaModel.ViewHolder>
         return false;
     }
 
+    public String getMimeType(){
+        if(isVideoFile()) return "video/*";
+        else return "image/*";
+    }
+
     @NonNull
     @Override
     public ViewHolder getViewHolder(View v) {

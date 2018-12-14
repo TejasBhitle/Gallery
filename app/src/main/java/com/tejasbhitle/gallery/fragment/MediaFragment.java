@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.tejasbhitle.gallery.R;
 import com.tejasbhitle.gallery.adapter.MediaPagerAdapter;
+import com.tejasbhitle.gallery.dialog.MediaInfoDialog;
 import com.tejasbhitle.gallery.model.MediaModel;
 import com.tejasbhitle.gallery.util.Constants;
 import com.tejasbhitle.gallery.util.FileHandler;
@@ -127,7 +128,7 @@ public class MediaFragment extends Fragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 MediaModel media = mediaModels.get(viewpager.getCurrentItem());
                 switch (menuItem.getItemId()){
-                    case R.id.bottom_bar_item_copy:
+                    case R.id.bottom_bar_item_edit:
                         break;
                     case R.id.bottom_bar_item_delete:
                         break;
@@ -135,6 +136,7 @@ public class MediaFragment extends Fragment {
                         shareMedia(media);
                         break;
                     case R.id.bottom_bar_item_info:
+                        MediaInfoDialog.showMediaInfoDialog(getContext(),media);
                         break;
                 }
                 return true;

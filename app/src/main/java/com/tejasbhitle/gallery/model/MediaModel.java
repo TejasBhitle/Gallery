@@ -57,6 +57,20 @@ public class MediaModel extends AbstractItem<MediaModel, MediaModel.ViewHolder>
         else return "image/*";
     }
 
+    public String getFileSize(){
+        long fileLen = file.length();
+        if(fileLen < 1024)
+            return String.valueOf(fileLen +" b");
+        fileLen /= 1024;
+        if(fileLen < 1024)
+            return String.valueOf(fileLen +" Kb");
+        fileLen /= 1024;
+        if(fileLen < 1024)
+            return String.valueOf(fileLen +" Mb");
+        fileLen /= 1024;
+        return String.valueOf(fileLen +" Gb");
+    }
+
     @NonNull
     @Override
     public ViewHolder getViewHolder(View v) {

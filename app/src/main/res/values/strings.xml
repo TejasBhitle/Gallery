@@ -24,6 +24,9 @@
     <string name="other">Other</string>
     <string name="share_via">Share via</string>
     <string name="no_apps_found">No apps found</string>
+    <string name="edit">edit</string>
+    <string name="details">Details</string>
+    <string name="okay">Okay</string>
 
 
 </resources>

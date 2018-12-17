@@ -8,6 +8,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import androidx.preference.PreferenceManager
 
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -77,9 +78,9 @@ class MediaModel : AbstractItem<MediaModel, MediaModel.ViewHolder>, Parcelable {
 
             val displayMetrics = DisplayMetrics()
             (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
-
             val width = displayMetrics.widthPixels
-            val factor = 4
+            val factor = PreferenceManager.getDefaultSharedPreferences(context).
+                    getInt(context.getString(R.string.prefs_grid_column),2)
             media_image.layoutParams.height = width / factor
 
         }

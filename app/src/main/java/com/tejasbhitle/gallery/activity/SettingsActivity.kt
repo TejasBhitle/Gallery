@@ -5,16 +5,13 @@ import android.os.Bundle
 import android.view.MenuItem
 
 import com.tejasbhitle.gallery.R
-import com.tejasbhitle.gallery.util.ThemeManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.activity_settings.*
 
-class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(ThemeManager.getTheme(this))
         setContentView(R.layout.activity_settings)
 
         setSupportActionBar(toolbar)

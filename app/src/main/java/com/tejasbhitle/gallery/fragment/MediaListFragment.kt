@@ -3,6 +3,7 @@ package com.tejasbhitle.gallery.fragment
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
+import android.preference.PreferenceManager
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -34,7 +35,6 @@ class MediaListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-
         path = this.mediaListFragmentListener.getAlbumPath()
 
     }
@@ -47,13 +47,14 @@ class MediaListFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.recyclerview)
         itemAdapter = ItemAdapter<IItem<*, *>>()
-        fastAdapter = FastAdapter.with<IItem<*, *>, IAdapter<out IItem<*, *>>>(itemAdapter!!)
+        fastAdapter = FastAdapter.with<IItem<*, *>, IAdapter<out IItem<*, *>>>(itemAdapter)
         fastAdapter.withSelectable(true)
         fastAdapter.withOnClickListener{ v, adapter, item, position ->
-            mediaListFragmentListener!!.showMediaFragment(position)
+            mediaListFragmentListener.showMediaFragment(position)
             false
         }
-        val factor = 4
+        val factor = PreferenceManager.getDefaultSharedPreferences(context)
+                .getInt(getString(R.string.prefs_grid_column),2)
         gridLayoutManager = GridLayoutManager(context, factor)
         getAllMedia(path)
         recyclerView.layoutManager = gridLayoutManager
@@ -63,16 +64,18 @@ class MediaListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        /*
         val screenOrientation = (context!!
                 .getSystemService(Context.WINDOW_SERVICE) as WindowManager)
                 .defaultDisplay
                 .orientation
 
+
         if (screenOrientation == Surface.ROTATION_90 || screenOrientation == Surface.ROTATION_270)
             (recyclerView.layoutManager as GridLayoutManager).spanCount = 8
         else
             (recyclerView.layoutManager as GridLayoutManager).spanCount = 4
-
+        */
 
     }
 

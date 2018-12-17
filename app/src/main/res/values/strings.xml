@@ -4,6 +4,7 @@
     <!--Preference Strings-->
     <string name="prefs_show_hidden">preference_show_hidden</string>
     <string name="prefs_theme" >prefs_theme</string>
+    <string name="prefs_grid_column">prefs_grid_column</string>
 
     <string name="settings">Settings</string>
     <string name="show_hidden">Show Hidden</string>
@@ -27,6 +28,7 @@
     <string name="edit">edit</string>
     <string name="details">Details</string>
     <string name="okay">Okay</string>
+    <string name="grid_column">Grid column</string>
 
 
 </resources>

@@ -22,18 +22,15 @@ import com.tejasbhitle.gallery.util.ThemeManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : BaseActivity(){
 
     private val TAG = "MainActivity"
     private val STORAGE_PERMISSION_REQUEST_CODE = 6484
     private lateinit var albumFragment: AlbumListFragment
-    internal var theme: Int = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        theme = ThemeManager.getTheme(this)
-        setTheme(theme)
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(toolbar)
@@ -59,14 +56,7 @@ class MainActivity : AppCompatActivity(){
     }
 
     override fun onResume() {
-        if (isThemeChanged()) {
-            recreate()
-        }
         super.onResume()
-    }
-
-    private fun isThemeChanged(): Boolean {
-        return theme != ThemeManager.getTheme(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

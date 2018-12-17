@@ -14,7 +14,7 @@ import com.tejasbhitle.gallery.util.Constants
 
 import kotlinx.android.synthetic.main.activity_media.*
 
-class MediaActivity : AppCompatActivity() {
+class MediaActivity : BaseActivity() {
 
     private val TAG = "MediaActivity"
     private lateinit var mediaFragment: MediaFragment

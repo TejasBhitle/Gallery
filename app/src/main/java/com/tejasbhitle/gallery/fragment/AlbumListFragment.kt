@@ -75,7 +75,7 @@ class AlbumListFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
         PreferenceManager.getDefaultSharedPreferences(context!!)
                 .registerOnSharedPreferenceChangeListener(this)
 
-        val screenOrientation = (context!!
+        /*val screenOrientation = (context!!
                 .getSystemService(Context.WINDOW_SERVICE) as WindowManager)
                 .defaultDisplay
                 .orientation
@@ -83,7 +83,7 @@ class AlbumListFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
         if (screenOrientation == Surface.ROTATION_90 || screenOrientation == Surface.ROTATION_270)
             (recyclerView.layoutManager as GridLayoutManager).spanCount = 4
         else
-            (recyclerView.layoutManager as GridLayoutManager).spanCount = 2
+            (recyclerView.layoutManager as GridLayoutManager).spanCount = 2*/
     }
 
     override fun onPause() {

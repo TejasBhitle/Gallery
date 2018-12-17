@@ -4,8 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 
-import androidx.appcompat.app.AppCompatActivity
-
 import com.tejasbhitle.gallery.R
 import com.tejasbhitle.gallery.fragment.MediaListFragment
 import com.tejasbhitle.gallery.util.Constants
@@ -13,7 +11,7 @@ import com.tejasbhitle.gallery.util.Constants
 import kotlinx.android.synthetic.main.activity_album_detail.*
 
 
-class AlbumDetailActivity : AppCompatActivity(){
+class AlbumDetailActivity : BaseActivity(){
 
     private val TAG = "AlbumDetailActivity"
     private val ALBUM_PATH_KEY = "ALBUM_PATH_KEY"

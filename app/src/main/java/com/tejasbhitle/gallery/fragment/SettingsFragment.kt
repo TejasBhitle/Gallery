@@ -1,11 +1,12 @@
 package com.tejasbhitle.gallery.fragment
 
 import android.os.Bundle
-import androidx.preference.ListPreference
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
+import android.util.Log
+import androidx.fragment.app.DialogFragment
+import androidx.preference.*
 import com.tejasbhitle.gallery.R
+import com.tejasbhitle.gallery.preference.ColumnDialogPreference
+import com.tejasbhitle.gallery.preference.ColumnPreferenceDialogFragmentCompat
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -39,5 +40,23 @@ class SettingsFragment : PreferenceFragmentCompat() {
             )
         }
         true
+    }
+
+    override fun onDisplayPreferenceDialog(preference: Preference) {
+
+        Log.e(TAG,"preference not null")
+
+        var dialogFragment: DialogFragment? = null
+        if(preference is ColumnDialogPreference){
+            dialogFragment = ColumnPreferenceDialogFragmentCompat
+                    .newInstance(preference)
+        }
+
+        if(dialogFragment != null){
+            dialogFragment.setTargetFragment(this,0)
+            dialogFragment.show(this.fragmentManager,"PREFERENCE_DIALOG")
+        }
+        else
+            super.onDisplayPreferenceDialog(preference)
     }
 }
